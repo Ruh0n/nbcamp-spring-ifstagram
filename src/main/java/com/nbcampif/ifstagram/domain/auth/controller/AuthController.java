@@ -3,7 +3,7 @@ package com.nbcampif.ifstagram.domain.auth.controller;
 import com.nbcampif.ifstagram.domain.admin.dto.LoginRequestDto;
 import com.nbcampif.ifstagram.domain.auth.dto.SignupRequestDto;
 import com.nbcampif.ifstagram.domain.auth.service.AuthService;
-import com.nbcampif.ifstagram.global.response.CommonResponse;
+import com.nbcampif.ifstagram.global.dto.CommonResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

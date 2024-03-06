@@ -5,7 +5,7 @@ import com.nbcampif.ifstagram.domain.comment.dto.CommentResponseDto;
 import com.nbcampif.ifstagram.domain.comment.entity.Comment;
 import com.nbcampif.ifstagram.domain.comment.repository.CommentRepository;
 import com.nbcampif.ifstagram.domain.user.model.User;
-import com.nbcampif.ifstagram.global.response.CommonResponse;
+import com.nbcampif.ifstagram.global.dto.CommonResponse;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

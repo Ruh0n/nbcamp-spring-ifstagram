@@ -8,7 +8,7 @@ import com.nbcampif.ifstagram.domain.user.repository.RecentPasswordRepository;
 import com.nbcampif.ifstagram.domain.user.repository.UserRepository;
 import com.nbcampif.ifstagram.domain.user.repository.entity.RecentPassword;
 import com.nbcampif.ifstagram.global.exception.RecentPasswordException;
-import com.nbcampif.ifstagram.global.response.CommonResponse;
+import com.nbcampif.ifstagram.global.dto.CommonResponse;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;

@@ -3,7 +3,7 @@ package com.nbcampif.ifstagram.global.handler;
 import com.nbcampif.ifstagram.global.exception.NotFoundUserException;
 import com.nbcampif.ifstagram.global.exception.PermissionNotException;
 import com.nbcampif.ifstagram.global.exception.RecentPasswordException;
-import com.nbcampif.ifstagram.global.response.ErrorResponse;
+import com.nbcampif.ifstagram.global.dto.ErrorResponse;
 import jakarta.persistence.EntityNotFoundException;
 import java.util.concurrent.RejectedExecutionException;
 import org.springframework.http.HttpStatus;

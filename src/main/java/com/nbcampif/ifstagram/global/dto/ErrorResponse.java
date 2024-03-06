@@ -1,4 +1,4 @@
-package com.nbcampif.ifstagram.global.response;
+package com.nbcampif.ifstagram.global.dto;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

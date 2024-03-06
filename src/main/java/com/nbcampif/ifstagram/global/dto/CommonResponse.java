@@ -1,4 +1,4 @@
-package com.nbcampif.ifstagram.global.response;
+package com.nbcampif.ifstagram.global.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;

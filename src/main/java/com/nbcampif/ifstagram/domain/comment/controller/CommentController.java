@@ -5,7 +5,7 @@ import com.nbcampif.ifstagram.domain.comment.dto.CommentRequestDto;
 import com.nbcampif.ifstagram.domain.comment.dto.CommentResponseDto;
 import com.nbcampif.ifstagram.domain.comment.service.CommentService;
 import com.nbcampif.ifstagram.domain.user.model.User;
-import com.nbcampif.ifstagram.global.response.CommonResponse;
+import com.nbcampif.ifstagram.global.dto.CommonResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

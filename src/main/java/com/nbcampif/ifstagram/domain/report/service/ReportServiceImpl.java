@@ -7,7 +7,7 @@ import com.nbcampif.ifstagram.domain.report.dto.ReportResponseDto;
 import com.nbcampif.ifstagram.domain.report.repository.ReportRepository;
 import com.nbcampif.ifstagram.domain.user.model.User;
 import com.nbcampif.ifstagram.domain.user.repository.UserRepository;
-import com.nbcampif.ifstagram.global.response.CommonResponse;
+import com.nbcampif.ifstagram.global.dto.CommonResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

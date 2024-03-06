@@ -3,7 +3,7 @@ package com.nbcampif.ifstagram.domain.comment.service;
 import com.nbcampif.ifstagram.domain.comment.dto.CommentRequestDto;
 import com.nbcampif.ifstagram.domain.comment.dto.CommentResponseDto;
 import com.nbcampif.ifstagram.domain.user.model.User;
-import com.nbcampif.ifstagram.global.response.CommonResponse;
+import com.nbcampif.ifstagram.global.dto.CommonResponse;
 import java.util.List;
 import org.springframework.http.ResponseEntity;
 
