@@ -5,9 +5,9 @@ import lombok.Getter;
 @Getter
 public class ReportReponseDto {
 
-    private String content;
-    private Long from_user_id;
-    private Long to_user_id;
+    private final String content;
+    private final Long from_user_id;
+    private final Long to_user_id;
 
 
     public ReportReponseDto(String content, Long from_user_id, Long to_user_id) {

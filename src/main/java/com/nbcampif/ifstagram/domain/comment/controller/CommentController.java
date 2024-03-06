@@ -56,7 +56,7 @@ public class CommentController {
             @PathVariable Long postId,
             @AuthenticationPrincipal User user,
             @RequestBody CommentRequestDto requestDto) {
-        return commentService.updateComment(requestDto, commentId, postId, user);
+        return commentService.updateComment(requestDto, commentId, postId);
     }
 
   @Operation(summary = "댓글 삭제", description = "댓글 삭제")

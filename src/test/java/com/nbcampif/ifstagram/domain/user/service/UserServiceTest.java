@@ -35,7 +35,7 @@ class UserServiceTest extends TestValues {
   private RecentPasswordRepository recentPasswordRepository;
 
   @InjectMocks
-  private UserService userService;
+  private UserServiceImpl userService;
 
 
   @Nested

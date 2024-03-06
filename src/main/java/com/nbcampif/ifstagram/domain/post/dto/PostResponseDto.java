@@ -12,7 +12,7 @@ public class PostResponseDto {
   private final String title;
   private final String content;
   private final String postImg;
-  private List<PostResponseDto> postList = new ArrayList<>();
+  private final List<PostResponseDto> postList = new ArrayList<>();
 
   public PostResponseDto(Post post, String postImg) {
     this.title = post.getTitle();
