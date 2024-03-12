@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -27,7 +28,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class AdminTest {
+class AdminTest {
 
   @Autowired
   private TestRestTemplate restTemplate;
@@ -75,7 +76,12 @@ public class AdminTest {
     LoginRequestDto requestDto = new LoginRequestDto(admin.getEmail(), adminPassword);
     String baseUrl = "http://localhost:" + port + "/api/v1/admin/login";
 
-    ResponseEntity<CommonResponse> responseEntity = restTemplate.postForEntity(baseUrl, requestDto, CommonResponse.class);
+    ResponseEntity<CommonResponse<Void>> responseEntity = restTemplate.exchange(
+        baseUrl,
+        HttpMethod.POST,
+        new HttpEntity<>(requestDto),
+        new ParameterizedTypeReference<>() {}
+    );
 
     assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
     assertEquals("허용되지 않은 권한입니다.", responseEntity.getBody().getMessage());
@@ -105,7 +111,7 @@ public class AdminTest {
     headers.set(HttpHeaders.COOKIE, token);
 
     ResponseEntity<CommonResponse> responseEntity = restTemplate.exchange(
-      baseUrl, HttpMethod.GET, new HttpEntity<>(null, headers), CommonResponse.class
+        baseUrl, HttpMethod.GET, new HttpEntity<>(null, headers), CommonResponse.class
     );
 
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
@@ -124,7 +130,7 @@ public class AdminTest {
     headers.set(HttpHeaders.COOKIE, token);
 
     ResponseEntity<CommonResponse> responseEntity = restTemplate.exchange(
-      baseUrl, HttpMethod.GET, new HttpEntity<>(null, headers), CommonResponse.class
+        baseUrl, HttpMethod.GET, new HttpEntity<>(null, headers), CommonResponse.class
     );
 
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());

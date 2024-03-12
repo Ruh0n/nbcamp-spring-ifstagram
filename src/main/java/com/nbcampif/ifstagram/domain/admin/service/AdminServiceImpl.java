@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AdminServiceImpl implements AdminService {
 
   private final PostImageService postImageService;
@@ -52,12 +53,10 @@ public class AdminServiceImpl implements AdminService {
       throw new PermissionNotException("허용되지 않은 권한입니다.");
     }
 
-    String accessToken = jwtTokenProvider.generateAccessToken(user.getUserId(),
-        user.getRole().getAuthority());
-    String refreshToken = jwtTokenProvider.generateRefreshToken(
-        user.getUserId(),
-        user.getRole().getAuthority()
-    );
+    String accessToken = jwtTokenProvider.generateAccessToken(user.getUserId(), user.getRole()
+        .getAuthority());
+    String refreshToken = jwtTokenProvider.generateRefreshToken(user.getUserId(), user.getRole()
+        .getAuthority());
 
     jwtTokenProvider.addAccessTokenToCookie(accessToken, response);
   }
@@ -99,16 +98,14 @@ public class AdminServiceImpl implements AdminService {
   }
 
   @Override
-  @Transactional
   public void updateUser(Long userId, UserForceUpdateRequestDto requestDto) {
     User user = userRepository.findUser(userId)
         .orElseThrow(() -> new NotFoundUserException("해당 유저는 존재하지 않습니다."));
 
-    userRepository.updateUser(requestDto, user);
+    userRepository.forceUpdateUser(requestDto, user);
   }
 
   @Override
-  @Transactional
   public void updatePost(Long postId, PostRequestDto requestDto, MultipartFile image) {
 
     Post post = postRepository.findById(postId)
@@ -118,11 +115,9 @@ public class AdminServiceImpl implements AdminService {
   }
 
   @Override
-  @Transactional
   public void deletePost(Long postId) {
     Post post = postRepository.findById(postId)
-        .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다.")
-        );
+        .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
     post.delete();
   }
 

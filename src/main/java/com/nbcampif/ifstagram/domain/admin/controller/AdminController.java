@@ -40,87 +40,87 @@ public class AdminController {
   @Operation(summary = "관리자 로그인", description = "관리자 로그인")
   @PostMapping("/login")
   public ResponseEntity<CommonResponse<Void>> adminLogin(
-    @RequestBody LoginRequestDto requestDto,
-    HttpServletResponse response
+      @RequestBody LoginRequestDto requestDto,
+      HttpServletResponse response
   ) {
     adminService.login(requestDto, response);
     return ResponseEntity.status(HttpStatus.OK.value()).body(
-      CommonResponse.<Void>builder().message("로그인 성공").build()
+        CommonResponse.<Void>builder().message("로그인 성공").build()
     );
   }
 
   @Operation(summary = "유저 조회", description = "관리자가 유저를 조회할 수 있는 API")
   @GetMapping("/user/{userId}")
   public ResponseEntity<CommonResponse<UserResponseDto>> searchUser(
-    @PathVariable Long userId,
-    @AuthenticationPrincipal User admin
+      @PathVariable Long userId,
+      @AuthenticationPrincipal User admin
   ) {
     UserResponseDto responseDto = adminService.searchUser(userId);
     return ResponseEntity.status(HttpStatus.OK.value()).body(
-      CommonResponse.<UserResponseDto>builder()
-        .message("조회 성공")
-        .data(responseDto)
-        .build()
+        CommonResponse.<UserResponseDto>builder()
+            .message("조회 성공")
+            .data(responseDto)
+            .build()
     );
   }
 
   @Operation(summary = "신고 내역 조회", description = "관리자가 신고 내역을 조회할 수 있는 API")
   @GetMapping("/report/{reportId}")
   public ResponseEntity<CommonResponse<List<ReportReponseDto>>> searchReport(
-    @PathVariable Long reportId,
-    @AuthenticationPrincipal User admin
+      @PathVariable Long reportId,
+      @AuthenticationPrincipal User admin
   ) {
     List<ReportReponseDto> reponseList = adminService.searchReport(reportId);
     return ResponseEntity.status(HttpStatus.OK.value()).body(
-      CommonResponse.<List<ReportReponseDto>>builder()
-        .message("신고 내역 조회 성공")
-        .data(reponseList)
-        .build()
+        CommonResponse.<List<ReportReponseDto>>builder()
+            .message("신고 내역 조회 성공")
+            .data(reponseList)
+            .build()
     );
   }
 
   @Operation(summary = "유저 정보 수정", description = "관리자가 유저의 정보를 수정할 수 있는 API")
   @PutMapping("/user/{userId}")
   public ResponseEntity<CommonResponse<Void>> updateUser(
-    @PathVariable Long userId,
-    @RequestBody UserForceUpdateRequestDto requestDto,
-    @AuthenticationPrincipal User admin
+      @PathVariable Long userId,
+      @RequestBody UserForceUpdateRequestDto requestDto,
+      @AuthenticationPrincipal User admin
   ) {
     adminService.updateUser(userId, requestDto);
     return ResponseEntity.status(HttpStatus.OK.value()).body(
-      CommonResponse.<Void>builder()
-        .message("유저 정보 수정 성공")
-        .build()
+        CommonResponse.<Void>builder()
+            .message("유저 정보 수정 성공")
+            .build()
     );
   }
 
   @Operation(summary = "게시글 수정", description = "관리자가 게시글을 수정할 수 있는 API")
   @PutMapping("/post/{postId}")
   public ResponseEntity<CommonResponse<Void>> updatePost(
-    @PathVariable Long postId,
-    @RequestPart(value = "data") PostRequestDto requestDto,
-    @RequestPart(value = "file") MultipartFile image,
-    @AuthenticationPrincipal User admin
-  ) throws IOException {
+      @PathVariable Long postId,
+      @RequestPart(value = "data") PostRequestDto requestDto,
+      @RequestPart(value = "file") MultipartFile image,
+      @AuthenticationPrincipal User admin
+  ) {
     adminService.updatePost(postId, requestDto, image);
     return ResponseEntity.status(HttpStatus.OK.value()).body(
-      CommonResponse.<Void>builder()
-        .message("게시글 수정 성공")
-        .build()
+        CommonResponse.<Void>builder()
+            .message("게시글 수정 성공")
+            .build()
     );
   }
 
   @Operation(summary = "게시글 삭제", description = "관리자가 게시글을 삭제할 수 있는 API")
   @DeleteMapping("/post/{postId}")
   public ResponseEntity<CommonResponse<Void>> deletePost(
-    @PathVariable Long postId,
-    @AuthenticationPrincipal User admin
+      @PathVariable Long postId,
+      @AuthenticationPrincipal User admin
   ) {
     adminService.deletePost(postId);
     return ResponseEntity.status(HttpStatus.OK.value()).body(
-      CommonResponse.<Void>builder()
-        .message("게시글 삭제 성공")
-        .build()
+        CommonResponse.<Void>builder()
+            .message("게시글 삭제 성공")
+            .build()
     );
   }
 
@@ -129,10 +129,11 @@ public class AdminController {
   public ResponseEntity<CommonResponse<List<PostResponseDto>>> getDeletedPost() {
     List<PostResponseDto> responseList = adminService.getDeletedPost();
     return ResponseEntity.status(HttpStatus.OK.value()).body(
-      CommonResponse.<List<PostResponseDto>>builder()
-        .message("삭제된 게시글 조회")
-        .data(responseList)
-        .build()
+        CommonResponse.<List<PostResponseDto>>builder()
+            .message("삭제된 게시글 조회")
+            .data(responseList)
+            .build()
     );
   }
+
 }

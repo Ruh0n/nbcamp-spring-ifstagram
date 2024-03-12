@@ -27,6 +27,6 @@ public class FollowRepository {
   }
 
   public List<Long> findToUserIdByFromUserId(Long userId) {
-    return followJpaRepository.findToUserIdByFromUserId(userId);
+    return followJpaRepository.findAllToUserIdByFromUserId(userId);
   }
 }
