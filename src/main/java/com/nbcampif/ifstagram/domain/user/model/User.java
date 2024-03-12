@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -21,8 +22,11 @@ public class User implements OAuth2User {
   String nickname;
   String password;
   String profileImage;
+  @Default
   String introduction = "";
+  @Default
   Long reportedCount = 0L;
+  @Default
   UserRole role = UserRole.USER;
 
   private static final String DEFAULT_PROFILE_IMAGE = "https://k.kakaocdn.net/dn/1G9kp/btsAot8liOn/8CWudi3uy07rvFNUkk3ER0/img_640x640.jpg";
@@ -50,7 +54,13 @@ public class User implements OAuth2User {
     this.profileImage = profileImage;
   }
 
-  public User(String adminEmail, String nickname, String password, String profileImage, UserRole role) {
+  public User(
+      String adminEmail,
+      String nickname,
+      String password,
+      String profileImage,
+      UserRole role
+  ) {
     this.email = adminEmail;
     this.nickname = nickname;
     this.password = password;
