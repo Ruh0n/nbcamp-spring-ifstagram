@@ -28,19 +28,22 @@ public class PostQuerydslRepositoryImpl implements PostQuerydslRepository {
   }
 
   @Override
-  public Page<Post> findAllPosts(Pageable pageRequest) {
-    List<Post> posts = jpaQueryFactory.selectFrom(qPost)
+  public Page<Post> findAllPosts(Pageable pageable) {
+    JPAQuery<Post> jpaQuery = jpaQueryFactory.selectFrom(qPost)
         .where(qPost.deletedAt.isNull())
-        .orderBy(qPost.createdAt.desc())
-        .offset(pageRequest.getOffset())
-        .limit(pageRequest.getPageSize())
-        .fetch();
+        .orderBy(qPost.createdAt.desc());
+
+    if (pageable.isPaged()) {
+      jpaQuery = jpaQuery.offset(pageable.getOffset()).limit(pageable.getPageSize());
+    }
+
+    List<Post> posts = jpaQuery.fetch();
 
     JPAQuery<Long> totalQuery = jpaQueryFactory.select(Wildcard.count)
         .from(qPost)
         .where(qPost.deletedAt.isNull());
 
-    return PageableExecutionUtils.getPage(posts, pageRequest, totalQuery::fetchOne);
+    return PageableExecutionUtils.getPage(posts, pageable, totalQuery::fetchOne);
   }
 
   @Override

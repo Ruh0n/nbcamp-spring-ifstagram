@@ -185,7 +185,7 @@ class AdminTest {
     String baseUrl = "http://localhost:" + port + "/api/v1/admin/posts/deleted";
 
     ResponseEntity<CommonResponse> responseEntity = restTemplate.exchange(baseUrl, HttpMethod.GET, new HttpEntity<>(null, headers), CommonResponse.class);
-
+    System.out.println(responseEntity.getBody().getMessage());
     assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
     assertEquals("삭제된 게시글 조회", responseEntity.getBody().getMessage());
   }

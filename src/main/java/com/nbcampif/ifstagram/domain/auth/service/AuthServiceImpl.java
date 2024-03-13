@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class AuthServiceImpl extends DefaultOAuth2UserService implements AuthService {
 
-  private static final String DEFAULT_PROFILE_IMAGE = "https://k.kakaocdn.net/dn/1G9kp/btsAot8liOn/8CWudi3uy07rvFNUkk3ER0/img_640x640.jpg";
   private final PasswordEncoder passwordEncoder;
   private final JwtTokenProvider jwtTokenProvider;
   private final UserRepository userRepository;
@@ -44,11 +43,11 @@ public class AuthServiceImpl extends DefaultOAuth2UserService implements AuthSer
     }
     String encodedPassword = passwordEncoder.encode(requestDto.getPassword());
 
-    User newUser = new User(requestDto.getEmail(), requestDto.getNickname(), encodedPassword, DEFAULT_PROFILE_IMAGE);
+    User newUser = User.ofSignup(requestDto, encodedPassword);
     RecentPassword recentPassword = new RecentPassword(requestDto.getPassword(), newUser.getUserId());
-    recentPasswordRepository.save(recentPassword);
 
     userRepository.createUser(newUser);
+    recentPasswordRepository.save(recentPassword);
   }
 
   @Override
@@ -88,7 +87,7 @@ public class AuthServiceImpl extends DefaultOAuth2UserService implements AuthSer
 
     String accessToken = jwtTokenProvider.generateAccessToken(savedUser.getUserId(), savedUser.getRole()
         .getAuthority());
-    String refreshToken = jwtTokenProvider.generateRefreshToken(savedUser.getUserId(), savedUser.getRole()
+    jwtTokenProvider.generateRefreshToken(savedUser.getUserId(), savedUser.getRole()
         .getAuthority());
 
     jwtTokenProvider.addAccessTokenToCookie(accessToken, response);

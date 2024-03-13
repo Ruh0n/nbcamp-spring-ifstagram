@@ -113,8 +113,6 @@ class AuthIntegrationTest extends TestValues {
 
     @Test
     void success() throws Exception {
-      // given
-
       // when
       mockMvc.perform(post("/api/v1/auth/login")
               .contentType(APPLICATION_JSON)

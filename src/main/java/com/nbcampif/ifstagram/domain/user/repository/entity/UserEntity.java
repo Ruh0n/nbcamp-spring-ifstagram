@@ -14,13 +14,18 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Getter
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 @SQLRestriction(value = "deleted_at is NULL")
@@ -50,29 +55,20 @@ public class UserEntity extends Timestamped {
   private Long reportedCount = 0L;
 
   @Column
+  @Default
   @Enumerated(value = EnumType.STRING)
-  private UserRole role;
+  private UserRole role = UserRole.USER;
 
   public static UserEntity fromModel(User user) {
-    return new UserEntity(user.getEmail(), user.getNickname(), user.getPassword(), user.getProfileImage(), user.getIntroduction(), user.getReportedCount(), user.getRole());
-  }
-
-  private UserEntity(
-      String email,
-      String nickname,
-      String password,
-      String profileImage,
-      String introduction,
-      Long reportedCount,
-      UserRole role
-  ) {
-    this.email = email;
-    this.nickname = nickname;
-    this.password = password;
-    this.profileImage = profileImage;
-    this.introduction = introduction;
-    this.reportedCount = reportedCount;
-    this.role = role;
+    return UserEntity.builder()
+        .email(user.getEmail())
+        .nickname(user.getNickname())
+        .password(user.getPassword())
+        .profileImage(user.getProfileImage())
+        .introduction(user.getIntroduction())
+        .reportedCount(user.getReportedCount())
+        .role(user.getRole())
+        .build();
   }
 
   public User toModel() {

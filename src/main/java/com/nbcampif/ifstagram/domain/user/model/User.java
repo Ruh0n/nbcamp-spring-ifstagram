@@ -1,5 +1,6 @@
 package com.nbcampif.ifstagram.domain.user.model;
 
+import com.nbcampif.ifstagram.domain.auth.dto.SignupRequestDto;
 import com.nbcampif.ifstagram.domain.user.UserRole;
 import java.util.Collection;
 import java.util.Collections;
@@ -9,27 +10,30 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 @Getter
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class User implements OAuth2User {
+
+  private static final String DEFAULT_PROFILE_IMAGE = "https://k.kakaocdn.net/dn/1G9kp/btsAot8liOn/8CWudi3uy07rvFNUkk3ER0/img_640x640.jpg";
 
   Long userId;
   String email;
   String nickname;
   String password;
-  String profileImage;
+  @Default
+  String profileImage = DEFAULT_PROFILE_IMAGE;
   @Default
   String introduction = "";
   @Default
   Long reportedCount = 0L;
   @Default
   UserRole role = UserRole.USER;
-
-  private static final String DEFAULT_PROFILE_IMAGE = "https://k.kakaocdn.net/dn/1G9kp/btsAot8liOn/8CWudi3uy07rvFNUkk3ER0/img_640x640.jpg";
 
   public User(
       Long userId,
@@ -72,6 +76,14 @@ public class User implements OAuth2User {
       String email, String nickname, String profileImage
   ) {
     return new User(email, nickname, UUID.randomUUID().toString(), profileImage);
+  }
+
+  public static User ofSignup(SignupRequestDto requestDto, String encodedPassword) {
+    return User.builder()
+        .email(requestDto.getEmail())
+        .nickname(requestDto.getNickname())
+        .password(encodedPassword)
+        .build();
   }
 
   @Override

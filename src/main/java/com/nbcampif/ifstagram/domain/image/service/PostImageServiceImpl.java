@@ -5,6 +5,7 @@ import com.nbcampif.ifstagram.domain.image.repository.PostImageRepository;
 import com.nbcampif.ifstagram.domain.post.entity.Post;
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,10 +37,9 @@ public class PostImageServiceImpl implements PostImageService {
   @Override
   @Transactional(readOnly = true)
   public String getImage(Long id) {
-    PostImage image = postImageRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("게시물 이미지가 존재하지 않습니다"));
+    Optional<PostImage> image = postImageRepository.findById(id);
 
-    return image.getFilePath();
+    return image.map(PostImage::getFilePath).orElse(null);
   }
 
   @Override
