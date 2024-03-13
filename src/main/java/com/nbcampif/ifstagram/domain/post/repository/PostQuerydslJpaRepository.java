@@ -1,14 +1,13 @@
 package com.nbcampif.ifstagram.domain.post.repository;
 
 import com.nbcampif.ifstagram.domain.post.entity.Post;
-import java.util.List;
-import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface PostRepository extends JpaRepository<Post, Long> {
+public interface PostQuerydslJpaRepository extends JpaRepository<Post, Long>,
+    PostQuerydslRepository {
 
   @Modifying
   @Query("update Post p set p.likeCount = p.likeCount + 1 WHERE p.id = :postId")
@@ -18,7 +17,4 @@ public interface PostRepository extends JpaRepository<Post, Long> {
   @Query("update Post p set p.likeCount = p.likeCount - 1 WHERE p.id = :postId")
   void downCount(@Param("postId") Long postId);
 
-  List<Post> findAllByDeletedAtIsNotNullOrderByDeletedAtDesc();
-
-  List<Post> findAllByUserIdIn(List<Long> userList);
 }

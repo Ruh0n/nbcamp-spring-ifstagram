@@ -6,7 +6,7 @@ import com.nbcampif.ifstagram.domain.image.service.PostImageService;
 import com.nbcampif.ifstagram.domain.post.dto.PostRequestDto;
 import com.nbcampif.ifstagram.domain.post.dto.PostResponseDto;
 import com.nbcampif.ifstagram.domain.post.entity.Post;
-import com.nbcampif.ifstagram.domain.post.repository.PostRepository;
+import com.nbcampif.ifstagram.domain.post.repository.PostQuerydslJpaRepository;
 import com.nbcampif.ifstagram.domain.report.Entity.Report;
 import com.nbcampif.ifstagram.domain.report.repository.ReportRepository;
 import com.nbcampif.ifstagram.domain.user.UserRole;
@@ -33,7 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class AdminServiceImpl implements AdminService {
 
   private final PostImageService postImageService;
-  private final PostRepository postRepository;
+  private final PostQuerydslJpaRepository postQuerydslJpaRepository;
   private final ReportRepository reportRepository;
   private final UserRepository userRepository;
   private final JwtTokenProvider jwtTokenProvider;
@@ -91,7 +91,7 @@ public class AdminServiceImpl implements AdminService {
 
   @Override
   public List<PostResponseDto> getDeletedPost() {
-    return postRepository.findAllByDeletedAtIsNotNullOrderByDeletedAtDesc()
+    return postQuerydslJpaRepository.findAllPosts()
         .stream()
         .map(e -> new PostResponseDto(e, postImageService.getImage(e.getId())))
         .toList();
@@ -108,7 +108,7 @@ public class AdminServiceImpl implements AdminService {
   @Override
   public void updatePost(Long postId, PostRequestDto requestDto, MultipartFile image) {
 
-    Post post = postRepository.findById(postId)
+    Post post = postQuerydslJpaRepository.findById(postId)
         .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
     postImageService.updateImage(post, image);
     post.updatePost(requestDto);
@@ -116,7 +116,7 @@ public class AdminServiceImpl implements AdminService {
 
   @Override
   public void deletePost(Long postId) {
-    Post post = postRepository.findById(postId)
+    Post post = postQuerydslJpaRepository.findById(postId)
         .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
     post.delete();
   }

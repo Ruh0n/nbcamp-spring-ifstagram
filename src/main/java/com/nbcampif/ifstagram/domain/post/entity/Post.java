@@ -37,7 +37,7 @@ public class Post extends Timestamped {
   private Long repostCount;
   @Column(nullable = false)
   private Long userId;
-  @Column(nullable = true)
+  @Column
   private Long repostId;
 
   public Post(PostRequestDto requestDto, Long userId) {

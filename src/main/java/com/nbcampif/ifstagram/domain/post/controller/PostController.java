@@ -5,11 +5,11 @@ import com.nbcampif.ifstagram.domain.post.dto.PostResponseDto;
 import com.nbcampif.ifstagram.domain.post.service.PostService;
 import com.nbcampif.ifstagram.domain.user.model.User;
 import com.nbcampif.ifstagram.global.dto.CommonResponse;
-import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,19 +36,24 @@ public class PostController {
   public ResponseEntity<CommonResponse<Void>> createPost(
       @RequestPart(value = "data") PostRequestDto requestDto,
       @RequestPart(value = "file", required = false) MultipartFile image,
-      @AuthenticationPrincipal User user) throws Exception {
-
+      @AuthenticationPrincipal User user
+  ) {
     postService.createPost(requestDto, image, user);
 
-    return ResponseEntity.status(HttpStatus.OK.value()).body(
-        CommonResponse.<Void>builder().message("게시글 생성").build());
+    return ResponseEntity.status(HttpStatus.OK.value())
+        .body(CommonResponse.<Void>builder().message("게시글 생성").build());
   }
 
   @GetMapping
-  public ResponseEntity<CommonResponse<List<PostResponseDto>>> getPostList() {
-    List<PostResponseDto> responseDto = postService.getPostList();
-    return ResponseEntity.status(HttpStatus.OK.value()).body(
-        CommonResponse.<List<PostResponseDto>>builder()
+  public ResponseEntity<CommonResponse<List<PostResponseDto>>> getPostList(
+      @RequestParam(value = "page", defaultValue = "1") int page,
+      @RequestParam(value = "size", defaultValue = "10") int size
+  ) {
+    Pageable pageable = PageRequest.of(page - 1, size);
+    List<PostResponseDto> responseDto = postService.getPostList(pageable);
+
+    return ResponseEntity.status(HttpStatus.OK.value())
+        .body(CommonResponse.<List<PostResponseDto>>builder()
             .message("게시글 전체 조회 성공")
             .data(responseDto)
             .build());
@@ -55,10 +61,11 @@ public class PostController {
 
   @GetMapping("/{postId}")
   public ResponseEntity<CommonResponse<PostResponseDto>> getPost(
-      @PathVariable Long postId) throws MalformedURLException {
+      @PathVariable Long postId
+  ) {
     PostResponseDto responseDto = postService.getPost(postId);
-    return ResponseEntity.status(HttpStatus.OK.value()).body(
-        CommonResponse.<PostResponseDto>builder()
+    return ResponseEntity.status(HttpStatus.OK.value())
+        .body(CommonResponse.<PostResponseDto>builder()
             .message("게시글 조회 성공")
             .data(responseDto)
             .build());
@@ -69,30 +76,34 @@ public class PostController {
       @PathVariable Long postId,
       @RequestPart(value = "data") PostRequestDto requestDto,
       @RequestPart(value = "file", required = false) MultipartFile image
-    ) throws IOException {
+  ) {
     postService.updatePost(postId, requestDto, image);
-    return ResponseEntity.status(HttpStatus.OK.value()).body(
-        CommonResponse.<Void>builder().message("게시글 수정 성공").build());
+
+    return ResponseEntity.status(HttpStatus.OK.value())
+        .body(CommonResponse.<Void>builder().message("게시글 수정 성공").build());
   }
 
   @DeleteMapping("/{postId}")
   public ResponseEntity<CommonResponse<Void>> deletePost(
-      @PathVariable Long postId) {
+      @PathVariable Long postId
+  ) {
     postService.deletePost(postId);
 
-    return ResponseEntity.status(HttpStatus.OK.value()).body(
-        CommonResponse.<Void>builder().message("게시글 삭제 성공").build());
+    return ResponseEntity.status(HttpStatus.OK.value())
+        .body(CommonResponse.<Void>builder().message("게시글 삭제 성공").build());
   }
 
   @GetMapping("/follow")
   public ResponseEntity<CommonResponse<List<PostResponseDto>>> followPost(
-    @AuthenticationPrincipal User user
+      @AuthenticationPrincipal User user
   ) {
     List<PostResponseDto> postList = postService.followPost(user);
-    return ResponseEntity.status(HttpStatus.OK.value()).body(
-      CommonResponse.<List<PostResponseDto>>builder()
-        .message("팔로우한 게시글 조회")
-        .data(postList)
-        .build());
+
+    return ResponseEntity.status(HttpStatus.OK.value())
+        .body(CommonResponse.<List<PostResponseDto>>builder()
+            .message("팔로우한 게시글 조회")
+            .data(postList)
+            .build());
   }
+
 }

@@ -6,7 +6,7 @@ import com.nbcampif.ifstagram.domain.admin.dto.LoginRequestDto;
 import com.nbcampif.ifstagram.domain.admin.dto.UserForceUpdateRequestDto;
 import com.nbcampif.ifstagram.domain.post.dto.PostRequestDto;
 import com.nbcampif.ifstagram.domain.post.entity.Post;
-import com.nbcampif.ifstagram.domain.post.repository.PostRepository;
+import com.nbcampif.ifstagram.domain.post.repository.PostQuerydslJpaRepository;
 import com.nbcampif.ifstagram.domain.user.UserRole;
 import com.nbcampif.ifstagram.domain.user.model.User;
 import com.nbcampif.ifstagram.domain.user.repository.UserRepository;
@@ -37,7 +37,7 @@ class AdminTest {
   private UserRepository userRepository;
 
   @Autowired
-  private PostRepository postRepository;
+  private PostQuerydslJpaRepository postQuerydslJpaRepository;
 
   @LocalServerPort
   private int port;
@@ -160,7 +160,7 @@ class AdminTest {
   @Test
   void admin_post_delete() {
     Post post = new Post(new PostRequestDto("title", "content"), 100L);
-    postRepository.save(post);
+    postQuerydslJpaRepository.save(post);
 
     HttpHeaders headers = new HttpHeaders();
     headers.set(HttpHeaders.COOKIE, token);
@@ -176,7 +176,7 @@ class AdminTest {
   @Test
   void admin_deleted_post_search() {
     Post post = new Post(new PostRequestDto("title", "content"), 100L);
-    postRepository.save(post);
+    postQuerydslJpaRepository.save(post);
     post.delete();
 
     HttpHeaders headers = new HttpHeaders();

@@ -1,7 +1,7 @@
 package com.nbcampif.ifstagram.domain.repost.service;
 
 import com.nbcampif.ifstagram.domain.post.entity.Post;
-import com.nbcampif.ifstagram.domain.post.repository.PostRepository;
+import com.nbcampif.ifstagram.domain.post.repository.PostQuerydslJpaRepository;
 import com.nbcampif.ifstagram.domain.repost.entity.Repost;
 import com.nbcampif.ifstagram.domain.repost.repository.RepostRepository;
 import com.nbcampif.ifstagram.domain.user.model.User;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RepostServiceImpl implements RepostService {
 
   private final RepostRepository repostRepository;
-  private final PostRepository postRepository;
+  private final PostQuerydslJpaRepository postQuerydslJpaRepository;
 
   @Override
   @Transactional
@@ -22,13 +22,13 @@ public class RepostServiceImpl implements RepostService {
       Long postId, User user
   ) {
     // 원본 게시글 정보 가져옴
-    Post post = postRepository.findById(postId)
+    Post post = postQuerydslJpaRepository.findById(postId)
         .orElseThrow(() -> new IllegalCallerException("일치하는 게시글이 없습니다."));
 
     Post savePost = new Post(post, user.getUserId());
 
     // 원본 게시글 새롭게 저장
-    Post savePostInfo = postRepository.save(savePost);
+    Post savePostInfo = postQuerydslJpaRepository.save(savePost);
 
     // 원본 게시글을 새롭게 저장 repost id를 가져온 post id로 저장
 
