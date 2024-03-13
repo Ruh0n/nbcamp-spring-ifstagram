@@ -4,7 +4,7 @@ spring:
       client:
         registration:
           kakao:
-            client-id: asdf1234asdf1234asdf1234asdf1234asdf1234
+            client-id: 11111111111111111111111111111111111111111111
             redirect-uri: "{baseUrl}/api/v1/auth/login/oauth2/callback/{registrationId}"
             authorization-grant-type: authorization_code
             client-name: kakao
