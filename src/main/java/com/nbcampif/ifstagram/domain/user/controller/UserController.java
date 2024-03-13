@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserController {
 
   private final UserService userService;
-  //신고기능
 
   @GetMapping("/my-page")
   public ResponseEntity<CommonResponse<UserResponseDto>> myPage(
@@ -34,7 +33,8 @@ public class UserController {
 
   @PostMapping("/{userId}/follow")
   public ResponseEntity<CommonResponse<Void>> follow(
-      @PathVariable(name = "userId") Long toUserId, @AuthenticationPrincipal User user
+      @PathVariable(name = "userId") Long toUserId,
+      @AuthenticationPrincipal User user
   ) {
     userService.follow(user, toUserId);
 
@@ -55,7 +55,6 @@ public class UserController {
   public ResponseEntity<CommonResponse<Void>> reportUser(
       @PathVariable Long userId
   ) {
-    System.out.println(userId);
     return userService.reportUser(userId);
   }
 

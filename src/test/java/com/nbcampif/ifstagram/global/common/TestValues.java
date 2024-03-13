@@ -5,6 +5,7 @@ import com.nbcampif.ifstagram.domain.auth.dto.SignupRequestDto;
 import com.nbcampif.ifstagram.domain.user.UserRole;
 import com.nbcampif.ifstagram.domain.user.dto.UserUpdateRequestDto;
 import com.nbcampif.ifstagram.domain.user.model.User;
+import org.springframework.security.authentication.TestingAuthenticationToken;
 
 public class TestValues {
 
@@ -41,7 +42,7 @@ public class TestValues {
   public final static LoginRequestDto LOGIN_REQUEST_DTO2 = new LoginRequestDto(TEST_EMAIL2, TEST_PASSWORD2);
   public final static LoginRequestDto LOGIN_REQUEST_DTO_NOT_EXISTING_USER = new LoginRequestDto(TEST_EMAIL3, TEST_PASSWORD1);
   public final static LoginRequestDto LOGIN_REQUEST_DTO_WRONG_PASSWORD = new LoginRequestDto(TEST_EMAIL2,
-      TEST_PASSWORD1
-      + TEST_PASSWORD1);
+      TEST_PASSWORD1 + TEST_PASSWORD1);
+  public static final TestingAuthenticationToken TEST_AUTHENTICATION = new TestingAuthenticationToken(TEST_USER1, null, UserRole.USER.name());
 
 }
