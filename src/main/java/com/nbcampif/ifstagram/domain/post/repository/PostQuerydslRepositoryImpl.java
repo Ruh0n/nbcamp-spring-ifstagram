@@ -2,13 +2,15 @@ package com.nbcampif.ifstagram.domain.post.repository;
 
 import com.nbcampif.ifstagram.domain.post.entity.Post;
 import com.nbcampif.ifstagram.domain.post.entity.QPost;
+import com.querydsl.core.types.dsl.Wildcard;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
@@ -34,12 +36,11 @@ public class PostQuerydslRepositoryImpl implements PostQuerydslRepository {
         .limit(pageRequest.getPageSize())
         .fetch();
 
-    long total = jpaQueryFactory.select(qPost.count())
+    JPAQuery<Long> totalQuery = jpaQueryFactory.select(Wildcard.count)
         .from(qPost)
-        .where(qPost.deletedAt.isNull())
-        .fetchFirst();
+        .where(qPost.deletedAt.isNull());
 
-    return new PageImpl<>(posts, pageRequest, total);
+    return PageableExecutionUtils.getPage(posts, pageRequest, totalQuery::fetchOne);
   }
 
   @Override
