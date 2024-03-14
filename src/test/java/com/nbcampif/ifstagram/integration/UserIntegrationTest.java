@@ -28,7 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-public class UserIntegrationTest extends TestValues {
+public class UserIntegrationTest implements TestValues {
 
   @Autowired
   private MockMvc mockMvc;

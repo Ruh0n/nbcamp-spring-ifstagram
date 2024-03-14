@@ -20,7 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class AuthIntegrationTest extends TestValues {
+class AuthIntegrationTest implements TestValues {
 
   @Autowired
   private MockMvc mockMvc;

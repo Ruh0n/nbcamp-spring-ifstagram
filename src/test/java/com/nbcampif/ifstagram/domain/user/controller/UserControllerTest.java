@@ -8,7 +8,6 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,14 +28,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
 @WebMvcTest(controllers = {UserController.class})
-class UserControllerTest extends TestValues {
+class UserControllerTest implements TestValues {
 
   @Autowired
   private WebApplicationContext context;
@@ -67,7 +65,6 @@ class UserControllerTest extends TestValues {
   }
 
   @Nested
-  @WithMockUser
   class MyPage {
 
     @Test
@@ -75,10 +72,11 @@ class UserControllerTest extends TestValues {
       // given
       URI uri = URI.create("/api/v1/users/my-page");
 
-      // when - then
-      mvc.perform(get(uri))
-          .andDo(print())
-          .andExpect(status().isOk());
+      // when
+      ResultActions resultActions = mvc.perform(get(uri));
+
+      // then
+      resultActions.andExpect(status().isOk());
     }
 
   }
@@ -91,10 +89,11 @@ class UserControllerTest extends TestValues {
       // given
       URI uri = URI.create("/api/v1/users/" + TEST_USER2.getUserId() + "/follow");
 
-      // when - then
-      mvc.perform(post(uri))
-          .andDo(print())
-          .andExpect(status().isOk());
+      // when
+      ResultActions resultActions = mvc.perform(post(uri));
+
+      // then
+      resultActions.andExpect(status().isOk());
     }
 
   }
@@ -102,15 +101,14 @@ class UserControllerTest extends TestValues {
   @Nested
   class updateUser {
 
-    private static final URI url = URI.create("/api/v1/users/my-page");
-
     @Test
     void success() throws Exception {
       // given
+      URI url = URI.create("/api/v1/users/my-page");
       UserUpdateRequestDto requestDto = fixtureMonkey.giveMeOne(UserUpdateRequestDto.class);
 
-      given(userService.updateUser(any(UserUpdateRequestDto.class), any(User.class)))
-          .willReturn(new User("", requestDto.getNickname(), requestDto.getPassword(), requestDto.getProfileImage()));
+      User willReturnUser = new User("", requestDto.getNickname(), requestDto.getPassword(), requestDto.getProfileImage());
+      given(userService.updateUser(any(), any())).willReturn(willReturnUser);
 
       // when
       ResultActions resultActions = mvc.perform(put(url).content(objectMapper.writeValueAsString(requestDto)));

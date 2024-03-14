@@ -7,7 +7,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
-import com.nbcampif.ifstagram.domain.user.dto.UserUpdateRequestDto;
 import com.nbcampif.ifstagram.domain.user.model.Follow;
 import com.nbcampif.ifstagram.domain.user.model.User;
 import com.nbcampif.ifstagram.domain.user.repository.FollowRepository;
@@ -24,13 +23,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class UserServiceTest extends TestValues {
+class UserServiceTest implements TestValues {
 
   @Mock
   private UserRepository userRepository;
   @Mock
   private FollowRepository followRepository;
-
   @Mock
   private RecentPasswordRepository recentPasswordRepository;
 
@@ -48,7 +46,7 @@ class UserServiceTest extends TestValues {
       User reportedUser = TEST_USER2;
       Long userId = reportedUser.getUserId();
 
-      given(userRepository.findUser(userId)).willReturn(Optional.of(reportedUser));
+      given(userRepository.findUser(any())).willReturn(Optional.of(reportedUser));
 
       // when
       userService.reportUser(userId);
@@ -69,10 +67,9 @@ class UserServiceTest extends TestValues {
     void success1() {
       // given
       User user = TEST_USER1;
-      Long toUserId = TEST_USER2.getUserId();
+      Long toUserId = TEST_ID2;
 
-      given(followRepository.findByFromUserIdAndToUserId(user.getUserId(), toUserId))
-          .willReturn(Optional.of(new Follow(user.getUserId(), toUserId)));
+      given(followRepository.findByFromUserIdAndToUserId(any(), any())).willReturn(Optional.of(new Follow(user.getUserId(), toUserId)));
       // when
       userService.follow(user, toUserId);
 
@@ -87,8 +84,7 @@ class UserServiceTest extends TestValues {
       User user = TEST_USER1;
       Long toUserId = TEST_USER2.getUserId();
 
-      given(followRepository.findByFromUserIdAndToUserId(user.getUserId(), toUserId))
-          .willReturn(Optional.empty());
+      given(followRepository.findByFromUserIdAndToUserId(any(), any())).willReturn(Optional.empty());
       // when
       userService.follow(user, toUserId);
 
@@ -118,8 +114,8 @@ class UserServiceTest extends TestValues {
       // given
       User user = TEST_USER1;
 
-      given(userRepository.findByEmailOrElseThrow(user.getEmail())).willReturn(user);
-      given(userRepository.updateUser(any(UserUpdateRequestDto.class), any(User.class))).willReturn(TEST_UPDATED_USER);
+      given(userRepository.findByEmailOrElseThrow(any())).willReturn(user);
+      given(userRepository.updateUser(any(), any())).willReturn(TEST_UPDATED_USER);
 
       // when
       User updatedUser = userService.updateUser(TEST_USER_UPDATE_REQUEST_DTO, user);
@@ -128,7 +124,7 @@ class UserServiceTest extends TestValues {
       assertEquals(TEST_UPDATE_INTRODUCTION, updatedUser.getIntroduction());
       assertEquals(TEST_UPDATE_NICKNAME, updatedUser.getNickname());
       assertEquals(TEST_UPDATE_PROFILEIMAGE, updatedUser.getProfileImage());
-      then(userRepository).should(times(1)).updateUser((UserUpdateRequestDto) any(), any());
+      then(userRepository).should(times(1)).updateUser(any(), any());
     }
 
   }
