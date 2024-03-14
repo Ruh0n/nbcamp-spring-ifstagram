@@ -13,7 +13,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Builder.Default;
@@ -52,6 +51,7 @@ public class UserEntity extends Timestamped {
   private String introduction;
 
   @Column
+  @Default
   private Long reportedCount = 0L;
 
   @Column
@@ -85,24 +85,33 @@ public class UserEntity extends Timestamped {
   }
 
   public void update(UserUpdateRequestDto requestDto) {
-    Optional.ofNullable(requestDto.getNickname())
-        .ifPresent(requestNickname -> this.nickname = requestNickname);
-    Optional.ofNullable(requestDto.getProfileImage())
-        .ifPresent(requestProfileImage -> this.profileImage = requestProfileImage);
-    Optional.ofNullable(requestDto.getIntroduction())
-        .ifPresent(requestIntroduction -> this.introduction = requestIntroduction);
-    Optional.ofNullable(requestDto.getPassword())
-        .ifPresent(requestPassword -> this.password = requestPassword);
+    if (requestDto.getNickname() != null) {
+      this.nickname = requestDto.getNickname();
+    }
+    if (requestDto.getProfileImage() != null) {
+      this.profileImage = requestDto.getProfileImage();
+    }
+    if (requestDto.getIntroduction() != null) {
+      this.introduction = requestDto.getIntroduction();
+    }
+    if (requestDto.getPassword() != null) {
+      this.password = requestDto.getPassword();
+    }
   }
 
   public void update(UserForceUpdateRequestDto requestDto) {
-    Optional.ofNullable(requestDto.getNickname())
-        .ifPresent(requestNickname -> this.nickname = requestNickname);
-    Optional.ofNullable(requestDto.getProfileImage())
-        .ifPresent(requestProfileImage -> this.profileImage = requestProfileImage);
-    Optional.ofNullable(requestDto.getIntroduction())
-        .ifPresent(requestIntroduction -> this.introduction = requestIntroduction);
-    Optional.ofNullable(requestDto.getRole()).ifPresent(requestRole -> this.role = requestRole);
+    if (requestDto.getNickname() != null) {
+      this.nickname = requestDto.getNickname();
+    }
+    if (requestDto.getProfileImage() != null) {
+      this.profileImage = requestDto.getProfileImage();
+    }
+    if (requestDto.getIntroduction() != null) {
+      this.introduction = requestDto.getIntroduction();
+    }
+    if (requestDto.getRole() != null) {
+      this.role = requestDto.getRole();
+    }
   }
 
   public void updateReportedCount() {

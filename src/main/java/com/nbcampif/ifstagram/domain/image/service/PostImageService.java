@@ -1,7 +1,6 @@
 package com.nbcampif.ifstagram.domain.image.service;
 
 import com.nbcampif.ifstagram.domain.post.entity.Post;
-import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface PostImageService {

@@ -24,9 +24,7 @@ public class CommentServiceImpl implements CommentService {
   //    private final PostRepository postRepository; // post repository 생성 후 수정
   @Override
   public ResponseEntity<CommonResponse<List<CommentResponseDto>>> createComment(
-      CommentRequestDto requestDto,
-      Long postId,
-      User user
+      CommentRequestDto requestDto, Long postId, User user
   ) {
 //        Post post = findPostById(postId); // validate post in repository
     Comment comment = new Comment(requestDto, user);
@@ -46,12 +44,8 @@ public class CommentServiceImpl implements CommentService {
 
   @Override
   public ResponseEntity<CommonResponse<List<CommentResponseDto>>> createReplyComment(
-      CommentRequestDto requestDto,
-      Long postId,
-      Long commentId,
-      User user
+      CommentRequestDto requestDto, Long postId, Long commentId, User user
   ) {
-//        Post post = findPostById(postId);
     findCommentById(commentId);
     Comment comment = new Comment(requestDto, user);
     comment.setPostId(postId);
@@ -80,11 +74,8 @@ public class CommentServiceImpl implements CommentService {
 
   @Override
   public ResponseEntity<CommonResponse<List<CommentResponseDto>>> updateComment(
-      CommentRequestDto requestDto,
-      Long commentId,
-      Long postId
+      CommentRequestDto requestDto, Long commentId, Long postId
   ) {
-//        findPostById(postId);
     Comment comment = findCommentById(commentId);
     comment.setContent(requestDto.getContent());
     commentRepository.save(comment);
@@ -100,8 +91,7 @@ public class CommentServiceImpl implements CommentService {
   @Override
   public ResponseEntity<CommonResponse<Void>> deleteComment(Long commentId) {
     Comment comment = findCommentById(commentId);
-    comment.Delete();
-    commentRepository.save(comment);
+    commentRepository.delete(comment);
 
     return ResponseEntity.status(HttpStatus.OK)
         .body(CommonResponse.<Void>builder().message("댓글이 삭제되었습니다.").build());
@@ -113,13 +103,8 @@ public class CommentServiceImpl implements CommentService {
 
   }
 
-//    //Post entity 생성 후 재수정
-//    private Post findPostById(Long postId){
-//        return postRepository.findById(postId).orElseThrow(()-> new IllegalArgumentException("해당 포스트가 없습니다."));
-//    }
-
-  private List<Comment> findByPostIdAndIsDeleted(Long postId, Boolean isdeleted) {
-    return commentRepository.findByPostIdAndIsDeletedAndParentCommentId(postId, isdeleted, 0L)
+  private List<Comment> findByPostIdAndIsDeleted(Long postId, Boolean isDeleted) {
+    return commentRepository.findByPostIdAndIsDeletedAndParentCommentId(postId, isDeleted, 0L)
         .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 없습니다."));
   }
 

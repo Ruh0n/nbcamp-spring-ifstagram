@@ -5,14 +5,13 @@ import com.nbcampif.ifstagram.domain.admin.dto.UserForceUpdateRequestDto;
 import com.nbcampif.ifstagram.domain.admin.service.AdminService;
 import com.nbcampif.ifstagram.domain.post.dto.PostRequestDto;
 import com.nbcampif.ifstagram.domain.post.dto.PostResponseDto;
-import com.nbcampif.ifstagram.domain.user.dto.ReportReponseDto;
+import com.nbcampif.ifstagram.domain.user.dto.ReportResponseDto;
 import com.nbcampif.ifstagram.domain.user.dto.UserResponseDto;
 import com.nbcampif.ifstagram.domain.user.model.User;
 import com.nbcampif.ifstagram.global.dto.CommonResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -66,13 +65,13 @@ public class AdminController {
 
   @Operation(summary = "신고 내역 조회", description = "관리자가 신고 내역을 조회할 수 있는 API")
   @GetMapping("/report/{reportId}")
-  public ResponseEntity<CommonResponse<List<ReportReponseDto>>> searchReport(
+  public ResponseEntity<CommonResponse<List<ReportResponseDto>>> searchReport(
       @PathVariable Long reportId,
       @AuthenticationPrincipal User admin
   ) {
-    List<ReportReponseDto> reponseList = adminService.searchReport(reportId);
+    List<ReportResponseDto> reponseList = adminService.searchReport(reportId);
     return ResponseEntity.status(HttpStatus.OK.value()).body(
-        CommonResponse.<List<ReportReponseDto>>builder()
+        CommonResponse.<List<ReportResponseDto>>builder()
             .message("신고 내역 조회 성공")
             .data(reponseList)
             .build()

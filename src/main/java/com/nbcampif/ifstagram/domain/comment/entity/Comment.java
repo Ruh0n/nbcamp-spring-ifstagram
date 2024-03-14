@@ -1,10 +1,8 @@
 package com.nbcampif.ifstagram.domain.comment.entity;
 
 
-
-import com.nbcampif.ifstagram.domain.user.model.User;
-import com.nbcampif.ifstagram.global.entity.Timestamped;
 import com.nbcampif.ifstagram.domain.comment.dto.CommentRequestDto;
+import com.nbcampif.ifstagram.domain.user.model.User;
 import com.nbcampif.ifstagram.global.entity.Timestamped;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,13 +14,15 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.SQLDelete;
 
 
 @Getter
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "comment")
+@SQLDelete(sql = "UPDATE comments SET is_deleted = true WHERE id = ?")
+@Table(name = "comments")
 public class Comment extends Timestamped {
 
   @Id
@@ -45,13 +45,13 @@ public class Comment extends Timestamped {
   private Boolean isDeleted = false;
 
 
-    public Comment(CommentRequestDto requestDto, User user) {
-        this.content = requestDto.getContent();
-        this.userId = user.getUserId();
+  public Comment(CommentRequestDto requestDto, User user) {
+    this.content = requestDto.getContent();
+    this.userId = user.getUserId();
   }
 
 
-  public void Delete() {
+  public void delete() {
     this.isDeleted = true;
     super.deletedAt = LocalDateTime.now();
   }

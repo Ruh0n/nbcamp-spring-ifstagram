@@ -7,10 +7,10 @@ import com.nbcampif.ifstagram.domain.post.dto.PostRequestDto;
 import com.nbcampif.ifstagram.domain.post.dto.PostResponseDto;
 import com.nbcampif.ifstagram.domain.post.entity.Post;
 import com.nbcampif.ifstagram.domain.post.repository.PostQuerydslJpaRepository;
-import com.nbcampif.ifstagram.domain.report.Entity.Report;
+import com.nbcampif.ifstagram.domain.report.entity.Report;
 import com.nbcampif.ifstagram.domain.report.repository.ReportRepository;
 import com.nbcampif.ifstagram.domain.user.UserRole;
-import com.nbcampif.ifstagram.domain.user.dto.ReportReponseDto;
+import com.nbcampif.ifstagram.domain.user.dto.ReportResponseDto;
 import com.nbcampif.ifstagram.domain.user.dto.UserResponseDto;
 import com.nbcampif.ifstagram.domain.user.model.User;
 import com.nbcampif.ifstagram.domain.user.repository.UserRepository;
@@ -37,6 +37,7 @@ public class AdminServiceImpl implements AdminService {
   private final ReportRepository reportRepository;
   private final UserRepository userRepository;
   private final JwtTokenProvider jwtTokenProvider;
+  private static final String USER_NOT_FOUND_EXCEPTION = "해당 유저는 존재하지 않습니다.";
 
   @Value("${admin.email}")
   private String adminEmail;
@@ -48,15 +49,14 @@ public class AdminServiceImpl implements AdminService {
   public void login(LoginRequestDto requestDto, HttpServletResponse response) {
     String password = requestDto.getPassword();
     User user = userRepository.findByEmail(requestDto.getEmail())
-        .orElseThrow(() -> new NotFoundUserException("해당 유저는 존재하지 않습니다."));
+        .orElseThrow(() -> new NotFoundUserException(USER_NOT_FOUND_EXCEPTION));
     if (!verifyPassword.equals(password) || !user.getRole().equals(UserRole.ADMIN)) {
       throw new PermissionNotException("허용되지 않은 권한입니다.");
     }
 
     String accessToken = jwtTokenProvider.generateAccessToken(user.getUserId(), user.getRole()
         .getAuthority());
-    String refreshToken = jwtTokenProvider.generateRefreshToken(user.getUserId(), user.getRole()
-        .getAuthority());
+    jwtTokenProvider.generateRefreshToken(user.getUserId(), user.getRole().getAuthority());
 
     jwtTokenProvider.addAccessTokenToCookie(accessToken, response);
   }
@@ -75,17 +75,17 @@ public class AdminServiceImpl implements AdminService {
   @Override
   public UserResponseDto searchUser(Long userId) {
     User user = userRepository.findUser(userId)
-        .orElseThrow(() -> new NotFoundUserException("해당 유저는 존재하지 않습니다."));
+        .orElseThrow(() -> new NotFoundUserException(USER_NOT_FOUND_EXCEPTION));
 
     return UserResponseDto.of(user);
   }
 
   @Override
-  public List<ReportReponseDto> searchReport(Long reportId) {
+  public List<ReportResponseDto> searchReport(Long reportId) {
     List<Report> reportList = reportRepository.findAllByToUserId(reportId);
 
     return reportList.stream()
-        .map(r -> new ReportReponseDto(r.getContent(), r.getFromUserId(), r.getToUserId()))
+        .map(r -> new ReportResponseDto(r.getContent(), r.getFromUserId(), r.getToUserId()))
         .toList();
   }
 
@@ -100,7 +100,7 @@ public class AdminServiceImpl implements AdminService {
   @Override
   public void updateUser(Long userId, UserForceUpdateRequestDto requestDto) {
     User user = userRepository.findUser(userId)
-        .orElseThrow(() -> new NotFoundUserException("해당 유저는 존재하지 않습니다."));
+        .orElseThrow(() -> new NotFoundUserException(USER_NOT_FOUND_EXCEPTION));
 
     userRepository.forceUpdateUser(requestDto, user);
   }

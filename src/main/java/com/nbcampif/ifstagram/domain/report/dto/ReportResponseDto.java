@@ -1,15 +1,14 @@
 package com.nbcampif.ifstagram.domain.report.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
+@AllArgsConstructor
 public class ReportResponseDto {
-    private String result;
 
-    public ReportResponseDto(String result){
-        this.result = result;
-    }
+  private String result;
+
 }

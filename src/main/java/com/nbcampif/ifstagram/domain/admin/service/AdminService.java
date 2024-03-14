@@ -4,7 +4,7 @@ import com.nbcampif.ifstagram.domain.admin.dto.LoginRequestDto;
 import com.nbcampif.ifstagram.domain.admin.dto.UserForceUpdateRequestDto;
 import com.nbcampif.ifstagram.domain.post.dto.PostRequestDto;
 import com.nbcampif.ifstagram.domain.post.dto.PostResponseDto;
-import com.nbcampif.ifstagram.domain.user.dto.ReportReponseDto;
+import com.nbcampif.ifstagram.domain.user.dto.ReportResponseDto;
 import com.nbcampif.ifstagram.domain.user.dto.UserResponseDto;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,7 +21,7 @@ public interface AdminService {
 
   UserResponseDto searchUser(Long userId);
 
-  List<ReportReponseDto> searchReport(Long reportId);
+  List<ReportResponseDto> searchReport(Long reportId);
 
   List<PostResponseDto> getDeletedPost();
 

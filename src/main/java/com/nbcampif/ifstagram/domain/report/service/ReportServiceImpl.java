@@ -1,7 +1,7 @@
 package com.nbcampif.ifstagram.domain.report.service;
 
 
-import com.nbcampif.ifstagram.domain.report.Entity.Report;
+import com.nbcampif.ifstagram.domain.report.entity.Report;
 import com.nbcampif.ifstagram.domain.report.dto.ReportRequestDto;
 import com.nbcampif.ifstagram.domain.report.dto.ReportResponseDto;
 import com.nbcampif.ifstagram.domain.report.repository.ReportRepository;
@@ -30,7 +30,7 @@ public class ReportServiceImpl implements ReportService {
   ) {
     User reportedUser = findUser(reportedUserId);
     userRepository.updateReportedCount(reportedUser);
-    reportRepository.save(new Report(reportedUserId, user.getUserId(), requestDto.getContent()));
+    reportRepository.save(new Report(requestDto.getContent(), reportedUserId, user.getUserId()));
     String reportResult = String.format("%s이 %s를 신고하셨습니다. 사유 : %s", user.getName(), reportedUser.getName(), requestDto.getContent());
     ReportResponseDto response = new ReportResponseDto(reportResult);
 
